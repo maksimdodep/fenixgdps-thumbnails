@@ -1,0 +1,22 @@
+{
+    "geode": "5.7.1",
+    "gd": {
+        "win": "2.2081",
+        "android": "2.2081",
+        "mac": "2.2081",
+        "ios": "2.2081"
+    },
+    "id": "maksimdodep.fenixgdps_thumbnails",
+    "name": "FenixGDPS Thumbnails",
+    "version": "1.0.0",
+    "developer": "maksimdodep",
+    "description": "Динамически загружает уникальные превью для уровней FenixGDPS из приватного GitHub репозитория.",
+    "repository": "https://github.com/maksimdodep/fenixgdps-thumbnails",
+    "dependencies": [
+        {
+            "id": "geode.node-ids",
+            "version": ">=v1.23.3",
+            "importance": "required"
+        }
+    ]
+}
