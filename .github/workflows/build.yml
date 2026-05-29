@@ -15,6 +15,12 @@ jobs:
       - name: Build Mod
         uses: geode-sdk/build-geode-mod@main
         with:
-        # правильный тег для геода 2.2081
+        # 2.2081 геод фикс
           sdk: v5.7.1
- # спасите пожалуйста cpp такое говнище
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fenixgdps-thumbnails-mod
+          path: build/*.geode
+# блять cpp это говнище ебаное
