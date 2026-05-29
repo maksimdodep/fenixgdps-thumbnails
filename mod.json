@@ -12,11 +12,10 @@
     "developer": "maksimdodep",
     "description": "Динамически загружает уникальные превью для уровней FenixGDPS из приватного GitHub репозитория.",
     "repository": "https://github.com/maksimdodep/fenixgdps-thumbnails",
-    "dependencies": [
-        {
-            "id": "geode.node-ids",
+    "dependencies": {
+        "geode.node-ids": {
             "version": ">=v1.23.3",
             "importance": "required"
         }
-    ]
+    }
 }
