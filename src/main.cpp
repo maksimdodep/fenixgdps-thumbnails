@@ -56,20 +56,17 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         int levelID = level->m_levelID.value();
         auto cachePath = Mod::get()->getSaveDir() / fmt::format("thumb_{}.png", levelID);
 
-        web::downloadFile(getThumbnailUrl(levelID), cachePath, [this, cachePath](auto progress) {
-            if (progress.isFinished() && !progress.isCancelled()) {
-                auto cacheStr = cachePath.string();
-                if (auto texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "")) {
-                    if (m_fields->m_bgSprite) {
-                        m_fields->m_bgSprite->removeFromParent();
-                    }
-                    m_fields->m_bgSprite = CCSprite::createWithTexture(texture);
-                    
-                    auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
-                    m_fields->m_bgSprite->setPosition({ winSize.width / 2.f, winSize.height / 2.f });
-                    m_fields->m_bgSprite->setScale(1.2f);
-                    this->addChild(m_fields->m_bgSprite, -1);
+        web::downloadFile(getThumbnailUrl(levelID), cachePath, [this, cachePath](bool success) {
+            if (!success) return;
+            auto cacheStr = cachePath.string();
+            if (auto texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "")) {
+                if (m_fields->m_bgSprite) {
+                    m_fields->m_bgSprite->removeFromParent();
                 }
+                m_fields->m_bgSprite = CCSprite::createWithTexture(texture);
+                m_fields->m_bgSprite->setPosition({ 284.5f, 160.f });
+                m_fields->m_bgSprite->setScale(1.2f);
+                this->addChild(m_fields->m_bgSprite, -1);
             }
         });
 
