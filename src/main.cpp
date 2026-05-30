@@ -17,26 +17,26 @@ std::string getThumbnailUrl(int levelID) {
 }
 
 class $modify(MyLevelInfoLayer, LevelInfoLayer) {
-    CCSprite* m_bgSprite = nullptr;
+    struct Fields {
+        cocos2d::CCSprite* m_bgSprite = nullptr;
+    };
 
-    bool init(GJGameLevel * level, bool p1) {
+    bool init(GJGameLevel* level, bool p1) {
         if (!LevelInfoLayer::init(level, p1)) return false;
 
         int levelID = level->m_levelID.value();
-        auto cachePath = Mod::get()->getLaurenceCacheDir() / fmt::format("bg_{}.png", levelID);
+        auto cachePath = Mod::get()->getSavedLoopDirectory() / fmt::format("bg_{}.png", levelID);
 
         web::AsyncWebRequest()
             .fetch(getThumbnailUrl(levelID))
             .into(cachePath)
             .then([this, cachePath](auto) {
-            this->displayBackground(cachePath.string());
-                })
+            })
             .expect([](std::string const&) {});
-
-        this->scheduleUpdate();
 
         return true;
     }
+};
 
     void displayBackground(std::string const& path) {
         auto winSize = CCDirector::sharedDirector()->getWinSize();
