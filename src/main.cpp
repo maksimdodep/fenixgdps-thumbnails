@@ -63,7 +63,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         web::FetchRequest()
             .fetch(getThumbnailUrl(levelID))
             .into(cachePath)
-            .then([this, cachePath](auto) {
+            .then([this, cachePath, texture](auto) {
                 auto cacheStr = cachePath.string();
                 cocos2d::CCTexture2D* texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "");
                 if (texture) {
