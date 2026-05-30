@@ -30,8 +30,7 @@ class $modify(MyLevelCell, LevelCell) {
         auto cachePath = Mod::get()->getSaveDir() / fmt::format("thumb_{}.png", levelID);
 
         web::WebRequest()
-            .get(getThumbnailUrl(levelID))
-            .into(cachePath)
+            .get(getThumbnailUrl(levelID), cachePath)
             .then([this, cachePath](auto) {
                 auto cacheStr = cachePath.string();
                 if (auto texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "")) {
@@ -60,8 +59,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         auto cachePath = Mod::get()->getSaveDir() / fmt::format("thumb_{}.png", levelID);
 
         web::WebRequest()
-            .get(getThumbnailUrl(levelID))
-            .into(cachePath)
+            .get(getThumbnailUrl(levelID), cachePath)
             .then([this, cachePath](auto) {
                 auto cacheStr = cachePath.string();
                 if (auto texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "")) {
