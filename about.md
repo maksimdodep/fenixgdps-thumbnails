@@ -1,16 +1,15 @@
 # 🖼️ FenixGDPS Thumbnails
 
-Этот мод — адаптация легендарного мода Level Thumbnails от официального разработчика **Capeling** (aka cdc), переписанная специально под приватный сервер FenixGDPS
-Забудьте про скучные дефолтные карточки уровней. Настало время вдохнуть жизнь в эти пустые ячеейки уровней :)
+This mod is a custom adaptation of the legendary **Level Thumbnails** mod by the official developer **Capeling** (aka cdc), rewritten specifically for the FenixGDPS private server.
+Forget about boring default level cards. It's time to bring life into those empty level slots :)
 
 ---
 
-## 🔥 Что делает этот мод?
+## 🔥 What does this mod do?
 
-Мод динамически, плавно и незаметно для игрока трансформирует визуальный стиль игры:
-* **Интеграция системы Capeling'а:** При открытии информации о любом уровне, мод мгновенно обращается к нашему официальному публичному репозиторию.
-* **Уникальный Снимок для каждого ID:** Он на лету находит изображение, соответствующее уникальному ID уровня, скачивает его в фоне и элегантно встраивает прямо в игровой интерфейс.
-* **Полная Асинхронность:** Благодаря оптимизированным сетевым запросам Geode, загрузка картинок происходит в отдельном потоке. Никаких фризов, микролагов или просадок FPS — всё летает на максимальной скорости!
+The mod dynamically, smoothly, and invisibly transforms the visual style of the game for the player:
+* **Capeling's System Integration:** When you open any level's info layer, the mod instantly requests our official public repository.
+* **Unique Snapshot for Each ID:** It finds the image corresponding to the unique level ID on the fly, downloads it in the background, and elegantly embeds it directly into the game UI.
+* **Full Asynchrony:** Thanks to optimized Geode network requests, images are downloaded in a separate thread. No freezes, micro-lags, or FPS drops — everything runs at maximum speed!
 
-
-сделано специально для приватного сервера FenixGDPS ❤
+:)
