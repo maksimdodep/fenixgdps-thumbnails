@@ -1,6 +1,7 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LevelCell.hpp>
 #include <Geode/modify/LevelInfoLayer.hpp>
+#include <Geode/utils/web.hpp>
 #include <chrono>
 
 using namespace geode::prelude;
@@ -9,7 +10,7 @@ std::string getThumbnailUrl(int levelID) {
     auto now = std::chrono::system_clock::now().time_since_epoch();
     auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
     
-    return "https://githubusercontent.com" 
+    return "https://raw.githubusercontent.com/maksimdodep/fenixgdps-thumbnails/main/thumbnails/" 
            + std::to_string(levelID) 
            + ".png?t=" 
            + std::to_string(millis);
@@ -28,7 +29,7 @@ class $modify(MyLevelCell, LevelCell) {
         int levelID = m_level->m_levelID.value();
         auto cachePath = Mod::get()->getSaveDir() / fmt::format("thumb_{}.png", levelID);
 
-        geode::utils::web::downloadFile(getThumbnailUrl(levelID), cachePath, [this, cachePath](bool success) {
+        web::downloadFile(getThumbnailUrl(levelID), cachePath, [this, cachePath](bool success) {
             if (!success) return;
             auto cacheStr = cachePath.string();
             if (auto texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "")) {
@@ -55,19 +56,20 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         int levelID = level->m_levelID.value();
         auto cachePath = Mod::get()->getSaveDir() / fmt::format("thumb_{}.png", levelID);
 
-        geode::utils::web::downloadFile(getThumbnailUrl(levelID), cachePath, [this, cachePath](bool success) {
-            if (!success) return;
-            auto cacheStr = cachePath.string();
-            if (auto texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "")) {
-                if (m_fields->m_bgSprite) {
-                    m_fields->m_bgSprite->removeFromParent();
+        web::downloadFile(getThumbnailUrl(levelID), cachePath, [this, cachePath](auto progress) {
+            if (progress.isFinished() && !progress.isCancelled()) {
+                auto cacheStr = cachePath.string();
+                if (auto texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "")) {
+                    if (m_fields->m_bgSprite) {
+                        m_fields->m_bgSprite->removeFromParent();
+                    }
+                    m_fields->m_bgSprite = CCSprite::createWithTexture(texture);
+                    
+                    auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
+                    m_fields->m_bgSprite->setPosition({ winSize.width / 2.f, winSize.height / 2.f });
+                    m_fields->m_bgSprite->setScale(1.2f);
+                    this->addChild(m_fields->m_bgSprite, -1);
                 }
-                m_fields->m_bgSprite = CCSprite::createWithTexture(texture);
-                
-                auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
-                m_fields->m_bgSprite->setPosition({ winSize.width / 2.f, winSize.height / 2.f });
-                m_fields->m_bgSprite->setScale(1.2f);
-                this->addChild(m_fields->m_bgSprite, -1);
             }
         });
 
