@@ -10,7 +10,7 @@ std::string getThumbnailUrl(int levelID) {
     auto now = std::chrono::system_clock::now().time_since_epoch();
     auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
     
-    return "https://githubusercontent.com" 
+    return "https://raw.githubusercontent.com/maksimdodep/fenixgdps-thumbnails/main/thumbnails/" 
            + std::to_string(levelID) 
            + ".png?t=" 
            + std::to_string(millis);
