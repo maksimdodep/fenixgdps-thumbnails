@@ -1,7 +1,6 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/LevelCell.hpp>
 #include <Geode/modify/LevelInfoLayer.hpp>
-#include <Geode/utils/web.hpp>
 #include <chrono>
 
 using namespace geode::prelude;
@@ -28,14 +27,9 @@ class $modify(MyLevelCell, LevelCell) {
 
         int levelID = m_level->m_levelID.value();
         auto cachePath = Mod::get()->getSaveDir() / fmt::format("thumb_{}.png", levelID);
+        auto cacheStr = cachePath.string();
 
-        web::downloadFile(getThumbnailUrl(levelID), cachePath, [this, cachePath](bool success) {
-            if (!success) return;
-            
-            auto cacheStr = cachePath.string();
-            cocos2d::CCTexture2D* texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "");
-            if (!texture) return;
-
+        if (auto texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "")) {
             if (m_fields->m_thumbnailSprite) {
                 m_fields->m_thumbnailSprite->removeFromParent();
             }
@@ -43,7 +37,7 @@ class $modify(MyLevelCell, LevelCell) {
             m_fields->m_thumbnailSprite->setPosition({ m_width - 60.f, m_height / 2.f });
             m_fields->m_thumbnailSprite->setScale(0.4f);
             this->addChild(m_fields->m_thumbnailSprite);
-        });
+        }
     }
 };
 
