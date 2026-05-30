@@ -68,8 +68,7 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
                     }
                     m_fields->m_bgSprite = CCSprite::createWithTexture(texture);
                     
-                    auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
-                    m_fields->m_bgSprite->setPosition({ winSize.width / 2.f, winSize.height / 2.f });
+                    m_fields->m_bgSprite->setPosition({ 284.5f, 160.f });
                     m_fields->m_bgSprite->setScale(1.2f);
                     this->addChild(m_fields->m_bgSprite, -1);
                     
@@ -87,13 +86,11 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         if (!m_fields->m_bgSprite) return;
 
         auto mousePos = cocos2d::CCDirector::sharedDirector()->getOpenGLView()->getMousePosition();
-        auto winSize = cocos2d::CCDirector::sharedDirector()->getWinSize();
-        
         cocos2d::CCPoint cocosMousePos = cocos2d::CCPoint(mousePos.x, mousePos.y);
         auto realPos = this->convertToNodeSpace(cocosMousePos);
 
-        float targetX = (winSize.width / 2.f) - (realPos.x - winSize.width / 2.f) * 0.05f;
-        float targetY = (winSize.height / 2.f) - (realPos.y - winSize.height / 2.f) * 0.05f;
+        float targetX = 284.5f - (realPos.x - 284.5f) * 0.05f;
+        float targetY = 160.f - (realPos.y - 160.f) * 0.05f;
 
         float currentX = m_fields->m_bgSprite->getPositionX();
         float currentY = m_fields->m_bgSprite->getPositionY();
