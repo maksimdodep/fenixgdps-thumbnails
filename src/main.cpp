@@ -34,12 +34,11 @@ class $modify(MyLevelCell, LevelCell) {
             .into(cachePath)
             .then([this, cachePath](auto) {
                 auto cacheStr = cachePath.string();
-                cocos2d::CCTexture2D* texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "");
-                if (texture) {
+                if (auto texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "")) {
                     if (m_fields->m_thumbnailSprite) {
                         m_fields->m_thumbnailSprite->removeFromParent();
                     }
-                    m_fields->m_thumbnailSprite = cocos2d::CCSprite::createWithTexture(texture);
+                    m_fields->m_thumbnailSprite = CCSprite::createWithTexture(texture);
                     m_fields->m_thumbnailSprite->setPosition({ m_width - 60.f, m_height / 2.f });
                     m_fields->m_thumbnailSprite->setScale(0.4f);
                     this->addChild(m_fields->m_thumbnailSprite);
@@ -52,35 +51,39 @@ class $modify(MyLevelCell, LevelCell) {
 class $modify(MyLevelInfoLayer, LevelInfoLayer) {
     struct Fields {
         cocos2d::CCSprite* m_bgSprite = nullptr;
+        std::filesystem::path m_layerCachePath;
     };
 
     bool init(GJGameLevel* level, bool p1) {
         if (!LevelInfoLayer::init(level, p1)) return false;
 
         int levelID = level->m_levelID.value();
-        auto cachePath = Mod::get()->getSaveDir() / fmt::format("thumb_{}.png", levelID);
+        m_fields->m_layerCachePath = Mod::get()->getSaveDir() / fmt::format("thumb_{}.png", levelID);
 
         web::FetchRequest()
             .fetch(getThumbnailUrl(levelID))
-            .into(cachePath)
-            .then([this, cachePath, texture](auto) {
-                auto cacheStr = cachePath.string();
-                cocos2d::CCTexture2D* texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "");
-                if (texture) {
-                    if (m_fields->m_bgSprite) {
-                        m_fields->m_bgSprite->removeFromParent();
-                    }
-                    m_fields->m_bgSprite = cocos2d::CCSprite::createWithTexture(texture);
-                    m_fields->m_bgSprite->setPosition({ 284.5f, 160.f });
-                    m_fields->m_bgSprite->setScale(1.2f);
-                    this->addChild(m_fields->m_bgSprite, -1);
-                    
-                    this->scheduleUpdate();
-                }
+            .into(m_fields->m_layerCachePath)
+            .then([this](auto) {
+                this->scheduleOnce(schedule_selector(MyLevelInfoLayer::applyBackground), 0.f);
             })
             .expect([](std::string const&) {});
 
         return true;
+    }
+
+    void applyBackground(float dt) {
+        auto cacheStr = m_fields->m_layerCachePath.string();
+        if (auto texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "")) {
+            if (m_fields->m_bgSprite) {
+                m_fields->m_bgSprite->removeFromParent();
+            }
+            m_fields->m_bgSprite = cocos2d::CCSprite::createWithTexture(texture);
+            m_fields->m_bgSprite->setPosition({ 284.5f, 160.f });
+            m_fields->m_bgSprite->setScale(1.2f);
+            this->addChild(m_fields->m_bgSprite, -1);
+            
+            this->scheduleUpdate();
+        }
     }
 
     void update(float dt) {
