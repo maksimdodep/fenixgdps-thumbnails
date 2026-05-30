@@ -33,11 +33,13 @@ class $modify(MyLevelCell, LevelCell) {
             .fetch(getThumbnailUrl(levelID))
             .into(cachePath)
             .then([this, cachePath](auto) {
-                if (auto texture = CCTextureCache::sharedTextureCache()->addImage(cachePath.string().c_str(), "")) {
+                auto cacheStr = cachePath.string();
+                cocos2d::CCTexture2D* texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "");
+                if (texture) {
                     if (m_fields->m_thumbnailSprite) {
                         m_fields->m_thumbnailSprite->removeFromParent();
                     }
-                    m_fields->m_thumbnailSprite = CCSprite::createWithTexture(texture);
+                    m_fields->m_thumbnailSprite = cocos2d::CCSprite::createWithTexture(texture);
                     m_fields->m_thumbnailSprite->setPosition({ m_width - 60.f, m_height / 2.f });
                     m_fields->m_thumbnailSprite->setScale(0.4f);
                     this->addChild(m_fields->m_thumbnailSprite);
@@ -62,12 +64,13 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
             .fetch(getThumbnailUrl(levelID))
             .into(cachePath)
             .then([this, cachePath](auto) {
-                if (auto texture = CCTextureCache::sharedTextureCache()->addImage(cachePath.string().c_str(), "")) {
+                auto cacheStr = cachePath.string();
+                cocos2d::CCTexture2D* texture = cocos2d::CCTextureCache::sharedTextureCache()->addImage(cacheStr.c_str(), "");
+                if (texture) {
                     if (m_fields->m_bgSprite) {
                         m_fields->m_bgSprite->removeFromParent();
                     }
-                    m_fields->m_bgSprite = CCSprite::createWithTexture(texture);
-                    
+                    m_fields->m_bgSprite = cocos2d::CCSprite::createWithTexture(texture);
                     m_fields->m_bgSprite->setPosition({ 284.5f, 160.f });
                     m_fields->m_bgSprite->setScale(1.2f);
                     this->addChild(m_fields->m_bgSprite, -1);
