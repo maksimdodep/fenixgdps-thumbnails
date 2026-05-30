@@ -29,11 +29,11 @@ class $modify(MyLevelCell, LevelCell) {
         int levelID = m_level->m_levelID.value();
         auto cachePath = Mod::get()->getSaveDir() / fmt::format("thumb_{}.png", levelID);
 
-        web::AsyncWebRequest()
+        web::FetchRequest()
             .fetch(getThumbnailUrl(levelID))
             .into(cachePath)
             .then([this, cachePath](auto) {
-                if (auto texture = CCTextureCache::sharedTextureCache()->addImage(cachePath.string().c_str())) {
+                if (auto texture = CCTextureCache::sharedTextureCache()->addImage(cachePath.string().c_str(), "")) {
                     if (m_fields->m_thumbnailSprite) {
                         m_fields->m_thumbnailSprite->removeFromParent();
                     }
@@ -58,11 +58,11 @@ class $modify(MyLevelInfoLayer, LevelInfoLayer) {
         int levelID = level->m_levelID.value();
         auto cachePath = Mod::get()->getSaveDir() / fmt::format("thumb_{}.png", levelID);
 
-        web::AsyncWebRequest()
+        web::FetchRequest()
             .fetch(getThumbnailUrl(levelID))
             .into(cachePath)
             .then([this, cachePath](auto) {
-                if (auto texture = CCTextureCache::sharedTextureCache()->addImage(cachePath.string().c_str())) {
+                if (auto texture = CCTextureCache::sharedTextureCache()->addImage(cachePath.string().c_str(), "")) {
                     if (m_fields->m_bgSprite) {
                         m_fields->m_bgSprite->removeFromParent();
                     }
